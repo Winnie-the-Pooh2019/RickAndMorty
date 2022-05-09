@@ -1,9 +1,11 @@
 package com.example.rickandmorty
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.rickandmorty.model.character.Character
 import com.example.rickandmorty.retfofit.RetrofitBuilder
 import com.example.rickandmorty.view.adapter.EpisodeAdapter
@@ -29,7 +31,19 @@ class EpisodeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_episodes)
-        supportActionBar!!.title = character.name
+
+        Glide.with(this)
+            .asBitmap()
+            .load(character.image)
+            .fallback(R.mipmap.ic_launcher)
+            .error(R.mipmap.ic_launcher)
+            .into(findViewById(R.id.details_image))
+
+        findViewById<TextView>(R.id.details_name).text = character.name
+        findViewById<TextView>(R.id.details_origin).text =
+            getString(R.string.details_origin_text, character.origin.name)
+        findViewById<TextView>(R.id.details_mariage).text =
+            getString(R.string.details_mariage_text, if (character.gender == "Male") "Not married" else "Single")
 
         findViewById<RecyclerView>(R.id.episodes_recycler).apply {
             layoutManager = LinearLayoutManager(this@EpisodeActivity)

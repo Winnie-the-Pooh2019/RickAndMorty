@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.example.rickandmorty.model.episode.Episode
 import com.example.rickandmorty.retfofit.RickAndMortyService
-import timber.log.Timber
 
 class EpisodeViewModel(
     private val service: RickAndMortyService, episodes: List<String>) : ViewModel() {
@@ -20,8 +19,6 @@ class EpisodeViewModel(
     }
 
     val episodes: MutableLiveData<List<Episode>> = liveData {
-        val list = service.getEpisodes(indices)
-        Timber.e("EPISODEVIEWMODEL = $list")
-        emit(list)
+        emit(service.getEpisodes(indices))
     } as MutableLiveData<List<Episode>>
 }

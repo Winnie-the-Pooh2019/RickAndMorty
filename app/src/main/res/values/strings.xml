@@ -4,4 +4,10 @@
     <string name="character_episodes">Episodes</string>
     <string name="character_photo">Character photo</string>
     <string name="more">more</string>
+
+    <string name="details_origin_text">Origin: %1$s</string>
+    <string name="details_mariage_text">The character is nasty. %1$s</string>
+    <string name="details_name_text">Name</string>
+    <string name="character_photo_desc">Character Photo</string>
+    <string name="details_file">File of…</string>
 </resources>

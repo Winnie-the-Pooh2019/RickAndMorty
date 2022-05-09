@@ -17,7 +17,6 @@ import com.example.rickandmorty.view.adapter.holder.CharacterViewHolder
 import com.example.rickandmorty.view.adapter.holder.Holder
 import com.example.rickandmorty.view.model.CharacterViewModel
 import com.google.gson.Gson
-import timber.log.Timber
 
 class CharacterAdapter(private val activity: AppCompatActivity, val model: CharacterViewModel) :
     ListAdapter<CharacterAdapterItem, Holder>(
@@ -61,7 +60,6 @@ class CharacterAdapter(private val activity: AppCompatActivity, val model: Chara
 
                 holder.itemView.setOnClickListener {
                     val serializedCharacter = Gson().toJson(currentList[position])
-                    Timber.e("SERIALIZED CHARACTER IN ONCLICK = $serializedCharacter")
 
                     activity.startActivity(Intent(activity, EpisodeActivity::class.java)
                         .apply { putExtra("CharacterData", serializedCharacter) })
