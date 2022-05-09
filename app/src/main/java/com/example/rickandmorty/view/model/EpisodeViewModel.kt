@@ -4,21 +4,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.example.rickandmorty.model.episode.Episode
-import com.example.rickandmorty.retfofit.RickAndMortyService
+import com.example.rickandmorty.retfofit.RickAndMortyRepository
+import timber.log.Timber
 
 class EpisodeViewModel(
-    private val service: RickAndMortyService, episodes: List<String>) : ViewModel() {
+    private val repository: RickAndMortyRepository, episodes: List<String>
+) : ViewModel() {
 
     private val indices: List<Int> = ArrayList<Int>().apply {
         episodes.forEach {
-            add(it
-                .substring(it
-                    .lastIndexOf('/') + 1)
-                .toInt())
+            add(
+                it.substring(it.lastIndexOf('/') + 1)
+                    .toInt()
+            )
         }
     }
 
     val episodes: MutableLiveData<List<Episode>> = liveData {
-        emit(service.getEpisodes(indices))
+        emit(repository.getEpisodes(indices) ?: listOf<Episode>().also { Timber.e(IllegalArgumentException()) })
     } as MutableLiveData<List<Episode>>
 }
