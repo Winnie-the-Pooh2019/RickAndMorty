@@ -1,12 +1,12 @@
 package com.example.rickandmorty.view.adapter.diff
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.rickandmorty.model.character.Character
+import com.example.rickandmorty.model.character.CharacterAdapterItem
 
-class CharacterItemDiffCallback : DiffUtil.ItemCallback<Character>() {
-    override fun areItemsTheSame(oldItem: Character, newItem: Character) =
+class CharacterItemDiffCallback : DiffUtil.ItemCallback<CharacterAdapterItem>() {
+    override fun areItemsTheSame(oldItem: CharacterAdapterItem, newItem: CharacterAdapterItem) =
         oldItem == newItem
 
-    override fun areContentsTheSame(oldItem: Character, newItem: Character) =
+    override fun areContentsTheSame(oldItem: CharacterAdapterItem, newItem: CharacterAdapterItem) =
         oldItem == newItem
 }

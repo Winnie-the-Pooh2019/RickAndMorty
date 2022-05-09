@@ -1,11 +1,11 @@
-package com.example.rickandmorty.view.model
+package com.example.rickandmorty.view.model.factory
 
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-object Factories {
+object ViewModelFactory {
     inline fun <reified T : ViewModel> viewModelFactory(
         activity: AppCompatActivity,
         crossinline initializer: () -> T

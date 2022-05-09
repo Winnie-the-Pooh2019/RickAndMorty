@@ -2,20 +2,27 @@ package com.example.rickandmorty.view.model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import com.example.rickandmorty.model.character.CharacterAdapterItem
 import com.example.rickandmorty.retfofit.RickAndMortyService
-
-import com.example.rickandmorty.model.character.Character
-import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 
 class CharacterViewModel(private val service: RickAndMortyService) : ViewModel() {
-    private val page: Int = 1
+    private var page: Int = 1
 
-    val characters: MutableLiveData<List<Character>> = liveData {
-        val data = service.getCharacters(page).results
-        emit(data)
-    } as MutableLiveData<List<Character>>
+    val characters: MutableLiveData<MutableList<CharacterAdapterItem>> = MutableLiveData()
+
+    fun load(): Unit = runBlocking {
+        val data = service.getCharacters(page)
+
+        characters.value = characters.value?.let {
+            val copy = ArrayList(it)
+            copy.removeAt(copy.size - 1)
+            copy.addAll(data.results)
+            copy.add(data.info)
+
+            return@let copy
+        } ?: data.results.toMutableList<CharacterAdapterItem>().apply { if (data.info.next != null) add(data.info) }
+
+        page++
+    }
 }

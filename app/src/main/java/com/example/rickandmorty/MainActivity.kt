@@ -7,11 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmorty.retfofit.RetrofitBuilder
 import com.example.rickandmorty.view.adapter.CharacterAdapter
 import com.example.rickandmorty.view.model.CharacterViewModel
-import com.example.rickandmorty.view.model.Factories
+import com.example.rickandmorty.view.model.factory.ViewModelFactory
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
-    private val model: CharacterViewModel by Factories.viewModelFactory(this) { CharacterViewModel(RetrofitBuilder.service) }
+    private val model: CharacterViewModel by ViewModelFactory.viewModelFactory(this) {
+        CharacterViewModel(
+            RetrofitBuilder.service
+        ).apply(CharacterViewModel::load)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<RecyclerView>(R.id.main_recycler).apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = CharacterAdapter(this@MainActivity).apply {
+            adapter = CharacterAdapter(this@MainActivity, model).apply {
                 model.characters.observe(this@MainActivity) { this.submitList(it) }
             }
         }
