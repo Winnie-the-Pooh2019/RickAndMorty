@@ -4,9 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rickandmorty.App
 import com.example.rickandmorty.model.character.CharacterAdapterItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class CharacterViewModel : ViewModel() {
@@ -14,10 +11,11 @@ class CharacterViewModel : ViewModel() {
 
     val characters: MutableLiveData<MutableList<CharacterAdapterItem>> = MutableLiveData()
 
-    fun load() = CoroutineScope(Dispatchers.Main).launch {
+    suspend fun load(): Boolean  {
+        Timber.e("IN LOAD FUNCTION")
         val data = App.repository.getCharacters(page)
 
-        if (data != null)
+        if (data != null) {
             characters.postValue(characters.value?.let {
                 val copy = ArrayList(it)
                 copy.removeAt(copy.size - 1)
@@ -27,9 +25,9 @@ class CharacterViewModel : ViewModel() {
                 return@let copy
             } ?: data.results.toMutableList<CharacterAdapterItem>()
                 .apply { if (data.info.next != null) add(data.info) })
-        else
-            Timber.e(IllegalArgumentException())
+            page++
+        }
 
-        page++
+        return data != null
     }
 }

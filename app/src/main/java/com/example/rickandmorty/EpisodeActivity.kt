@@ -2,6 +2,7 @@ package com.example.rickandmorty
 
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,9 @@ import com.example.rickandmorty.view.adapter.EpisodeAdapter
 import com.example.rickandmorty.view.model.EpisodeViewModel
 import com.example.rickandmorty.view.model.factory.ViewModelFactory
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class EpisodeActivity : AppCompatActivity() {
 
@@ -21,7 +25,16 @@ class EpisodeActivity : AppCompatActivity() {
     }
 
     private val model: EpisodeViewModel by ViewModelFactory.viewModelFactory(this) {
-        EpisodeViewModel(character.episode)
+        EpisodeViewModel(character.episode).apply {
+            CoroutineScope(Dispatchers.Main).launch {
+                if (!load())
+                    Toast.makeText(
+                        this@EpisodeActivity,
+                        this@EpisodeActivity.getString(R.string.connection_lost),
+                        Toast.LENGTH_LONG
+                    ).show()
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

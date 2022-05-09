@@ -2,10 +2,8 @@ package com.example.rickandmorty.view.model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import com.example.rickandmorty.App
 import com.example.rickandmorty.model.episode.Episode
-import timber.log.Timber
 
 class EpisodeViewModel(episodes: List<String>) : ViewModel() {
 
@@ -18,7 +16,14 @@ class EpisodeViewModel(episodes: List<String>) : ViewModel() {
         }
     }
 
-    val episodes: MutableLiveData<List<Episode>> = liveData {
-        emit(App.repository.getEpisodes(indices) ?: listOf<Episode>().also { Timber.e(IllegalArgumentException()) })
-    } as MutableLiveData<List<Episode>>
+    val episodes: MutableLiveData<List<Episode>> = MutableLiveData()
+
+    suspend fun load(): Boolean {
+        val data = App.repository.getEpisodes(indices)
+
+        if (data != null)
+            episodes.postValue(data!!)
+
+        return data != null
+    }
 }

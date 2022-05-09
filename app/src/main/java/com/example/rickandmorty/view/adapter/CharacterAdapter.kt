@@ -3,6 +3,7 @@ package com.example.rickandmorty.view.adapter
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
@@ -17,6 +18,9 @@ import com.example.rickandmorty.view.adapter.holder.CharacterViewHolder
 import com.example.rickandmorty.view.adapter.holder.Holder
 import com.example.rickandmorty.view.model.CharacterViewModel
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CharacterAdapter(private val activity: AppCompatActivity, val model: CharacterViewModel) :
     ListAdapter<CharacterAdapterItem, Holder>(
@@ -48,7 +52,7 @@ class CharacterAdapter(private val activity: AppCompatActivity, val model: Chara
         when (holder) {
             is CharacterViewHolder -> {
                 val character = currentList[position] as Character
-                
+
                 holder.name.text = (character).name
                 holder.gender.text = (character).gender
                 Glide.with(activity)
@@ -67,8 +71,15 @@ class CharacterAdapter(private val activity: AppCompatActivity, val model: Chara
             }
             is ButtonViewHolder -> {
                 holder.more.setOnClickListener {
-                    if ((currentList[position] as CharacterInfo).next != null)
-                        model.load()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        if ((currentList[position] as CharacterInfo).next != null)
+                            if (!model.load())
+                                Toast.makeText(
+                                    holder.itemView.context,
+                                    holder.itemView.context.getString(R.string.connection_lost),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                    }
                 }
             }
         }

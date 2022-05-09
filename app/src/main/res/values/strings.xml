@@ -10,4 +10,6 @@
     <string name="details_name_text">Name</string>
     <string name="character_photo_desc">Character Photo</string>
     <string name="details_file">File of…</string>
+
+    <string name="connection_lost">No internet connection</string>
 </resources>
