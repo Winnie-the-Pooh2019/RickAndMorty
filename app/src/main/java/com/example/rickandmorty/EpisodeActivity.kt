@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.rickandmorty.model.character.Character
-import com.example.rickandmorty.retfofit.RickAndMortyRepository
-import com.example.rickandmorty.retfofit.RickAndMortyService
 import com.example.rickandmorty.view.adapter.EpisodeAdapter
 import com.example.rickandmorty.view.model.EpisodeViewModel
 import com.example.rickandmorty.view.model.factory.ViewModelFactory
@@ -23,10 +21,7 @@ class EpisodeActivity : AppCompatActivity() {
     }
 
     private val model: EpisodeViewModel by ViewModelFactory.viewModelFactory(this) {
-        EpisodeViewModel(
-            RickAndMortyRepository(RickAndMortyService.getInstance()),
-            character.episode
-        )
+        EpisodeViewModel(character.episode)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

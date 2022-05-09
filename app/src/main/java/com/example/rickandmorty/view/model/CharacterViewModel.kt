@@ -2,20 +2,20 @@ package com.example.rickandmorty.view.model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.rickandmorty.App
 import com.example.rickandmorty.model.character.CharacterAdapterItem
-import com.example.rickandmorty.retfofit.RickAndMortyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class CharacterViewModel(private val repository: RickAndMortyRepository) : ViewModel() {
+class CharacterViewModel : ViewModel() {
     private var page: Int = 1
 
     val characters: MutableLiveData<MutableList<CharacterAdapterItem>> = MutableLiveData()
 
     fun load() = CoroutineScope(Dispatchers.Main).launch {
-        val data = repository.getCharacters(page)
+        val data = App.repository.getCharacters(page)
 
         if (data != null)
             characters.postValue(characters.value?.let {
