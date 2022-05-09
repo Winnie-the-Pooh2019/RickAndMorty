@@ -7,7 +7,11 @@ import kotlinx.coroutines.withContext
 
 class RickAndMortyRepository(private val service: RickAndMortyService) {
     suspend fun getCharacters(page: Int): CharacterWrapper? = withContext(Dispatchers.IO) {
-        val response = service.getCharacters(page)
+        val response = try {
+            service.getCharacters(page)
+        } catch (e: Exception) {
+            return@withContext null
+        }
 
         return@withContext if (response.isSuccessful)
             response.body()
@@ -15,7 +19,11 @@ class RickAndMortyRepository(private val service: RickAndMortyService) {
     }
 
     suspend fun getEpisodes(idList: List<Int>): List<Episode>? = withContext(Dispatchers.IO) {
-        val response = service.getEpisodes(idList)
+        val response = try {
+            service.getEpisodes(idList)
+        } catch (e: Exception) {
+            return@withContext null
+        }
 
         return@withContext if (response.isSuccessful)
             response.body()
